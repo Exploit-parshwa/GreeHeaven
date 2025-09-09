@@ -55,7 +55,7 @@ function createTransporter() {
 
     // Try SendGrid
     if (process.env.SENDGRID_API_KEY) {
-      transporter = nodemailer.createTransporter(emailConfig.sendgrid);
+      transporter = nodemailer.createTransport(emailConfig.sendgrid);
       console.log('📧 Using SendGrid for email service with API key:', process.env.SENDGRID_API_KEY.substring(0, 10) + '...');
       return transporter;
     }
