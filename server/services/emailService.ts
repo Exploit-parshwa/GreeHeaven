@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import nodemailer from "nodemailer";
 
 // OTP Storage (in production, use Redis or database)
 interface OTPData {
@@ -14,29 +14,29 @@ const otpStorage = new Map<string, OTPData>();
 // Email configuration - supports multiple providers
 const emailConfig = {
   gmail: {
-    service: 'gmail',
+    service: "gmail",
     auth: {
-      user: process.env.GMAIL_USER || '',
-      pass: process.env.GMAIL_APP_PASSWORD || '' // Use App Password, not regular password
-    }
+      user: process.env.GMAIL_USER || "",
+      pass: process.env.GMAIL_APP_PASSWORD || "", // Use App Password, not regular password
+    },
   },
   smtp: {
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: parseInt(process.env.SMTP_PORT || '587'),
+    host: process.env.SMTP_HOST || "smtp.gmail.com",
+    port: parseInt(process.env.SMTP_PORT || "587"),
     secure: false,
     auth: {
-      user: process.env.SMTP_USER || '',
-      pass: process.env.SMTP_PASSWORD || ''
-    }
+      user: process.env.SMTP_USER || "",
+      pass: process.env.SMTP_PASSWORD || "",
+    },
   },
   sendgrid: {
-    host: 'smtp.sendgrid.net',
+    host: "smtp.sendgrid.net",
     port: 587,
     auth: {
-      user: 'apikey',
-      pass: process.env.SENDGRID_API_KEY || ''
-    }
-  }
+      user: "apikey",
+      pass: process.env.SENDGRID_API_KEY || "",
+    },
+  },
 };
 
 // Create transporter based on available configuration
@@ -49,28 +49,33 @@ function createTransporter() {
     // Try Gmail first
     if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
       transporter = nodemailer.createTransport(emailConfig.gmail);
-      console.log('📧 Using Gmail SMTP for email service');
+      console.log("📧 Using Gmail SMTP for email service");
       return transporter;
     }
 
     // Try SendGrid
     if (process.env.SENDGRID_API_KEY) {
       transporter = nodemailer.createTransport(emailConfig.sendgrid);
-      console.log('📧 Using SendGrid for email service with API key:', process.env.SENDGRID_API_KEY.substring(0, 10) + '...');
+      console.log(
+        "📧 Using SendGrid for email service with API key:",
+        process.env.SENDGRID_API_KEY.substring(0, 10) + "...",
+      );
       return transporter;
     }
 
     // Try custom SMTP
     if (process.env.SMTP_HOST && process.env.SMTP_USER) {
       transporter = nodemailer.createTransport(emailConfig.smtp);
-      console.log('📧 Using custom SMTP for email service');
+      console.log("📧 Using custom SMTP for email service");
       return transporter;
     }
 
-    console.warn('⚠️ No email configuration found. OTP will be logged to console.');
+    console.warn(
+      "⚠️ No email configuration found. OTP will be logged to console.",
+    );
     return null;
   } catch (error) {
-    console.error('Failed to create email transporter:', error);
+    console.error("Failed to create email transporter:", error);
     return null;
   }
 }
@@ -91,17 +96,25 @@ function cleanExpiredOTPs() {
 }
 
 // Send OTP via email
-export async function sendOTPEmail(email: string): Promise<{ success: boolean; message: string; otpForDemo?: string }> {
+export async function sendOTPEmail(
+  email: string,
+): Promise<{ success: boolean; message: string; otpForDemo?: string }> {
   try {
     cleanExpiredOTPs();
 
     // Check if OTP was recently sent (rate limiting)
     const existingOTP = otpStorage.get(email);
-    if (existingOTP && Date.now() < existingOTP.expires && existingOTP.attempts < 3) {
-      const remainingTime = Math.ceil((existingOTP.expires - Date.now()) / 1000 / 60);
+    if (
+      existingOTP &&
+      Date.now() < existingOTP.expires &&
+      existingOTP.attempts < 3
+    ) {
+      const remainingTime = Math.ceil(
+        (existingOTP.expires - Date.now()) / 1000 / 60,
+      );
       return {
         success: false,
-        message: `OTP already sent. Please wait ${remainingTime} minutes before requesting again.`
+        message: `OTP already sent. Please wait ${remainingTime} minutes before requesting again.`,
       };
     }
 
@@ -114,18 +127,18 @@ export async function sendOTPEmail(email: string): Promise<{ success: boolean; m
       email,
       expires,
       attempts: 0,
-      used: false
+      used: false,
     });
 
     const emailTransporter = createTransporter();
 
     const mailOptions = {
       from: {
-        name: 'GreenHaven Plant Store',
-        address: process.env.FROM_EMAIL || 'Parshwakalantre33@gmail.com'
+        name: "GreenHaven Plant Store",
+        address: process.env.FROM_EMAIL || "Parshwakalantre33@gmail.com",
       },
       to: email,
-      subject: 'Your Login OTP - GreenHaven Admin',
+      subject: "Your Login OTP - GreenHaven Admin",
       html: `
         <!DOCTYPE html>
         <html>
@@ -188,7 +201,7 @@ export async function sendOTPEmail(email: string): Promise<{ success: boolean; m
         If you didn't request this login, please ignore this email.
         
         © 2024 GreenHaven Plant Store
-      `
+      `,
     };
 
     if (emailTransporter) {
@@ -197,17 +210,17 @@ export async function sendOTPEmail(email: string): Promise<{ success: boolean; m
         console.log(`📧 OTP sent successfully to ${email}`);
         return {
           success: true,
-          message: 'OTP sent successfully to your email address.'
+          message: "OTP sent successfully to your email address.",
         };
       } catch (emailError) {
-        console.error('Email sending failed:', emailError);
+        console.error("Email sending failed:", emailError);
 
         // Fall back to demo mode if email fails
         console.log(`🔐 FALLBACK DEMO MODE - OTP for ${email}: ${otp}`);
         return {
           success: true,
           message: `Email service error. Demo OTP: ${otp}`,
-          otpForDemo: otp
+          otpForDemo: otp,
         };
       }
     } else {
@@ -216,21 +229,23 @@ export async function sendOTPEmail(email: string): Promise<{ success: boolean; m
       return {
         success: true,
         message: `Email not configured. Demo OTP: ${otp}`,
-        otpForDemo: otp // Only in demo mode
+        otpForDemo: otp, // Only in demo mode
       };
     }
-
   } catch (error) {
-    console.error('Failed to send OTP email:', error);
+    console.error("Failed to send OTP email:", error);
     return {
       success: false,
-      message: 'Failed to send OTP. Please try again or contact support.'
+      message: "Failed to send OTP. Please try again or contact support.",
     };
   }
 }
 
 // Verify OTP
-export function verifyOTP(email: string, inputOTP: string): { success: boolean; message: string } {
+export function verifyOTP(
+  email: string,
+  inputOTP: string,
+): { success: boolean; message: string } {
   cleanExpiredOTPs();
 
   const otpData = otpStorage.get(email);
@@ -238,7 +253,7 @@ export function verifyOTP(email: string, inputOTP: string): { success: boolean; 
   if (!otpData) {
     return {
       success: false,
-      message: 'OTP not found or expired. Please request a new one.'
+      message: "OTP not found or expired. Please request a new one.",
     };
   }
 
@@ -247,7 +262,7 @@ export function verifyOTP(email: string, inputOTP: string): { success: boolean; 
     otpStorage.delete(email);
     return {
       success: false,
-      message: 'OTP has expired. Please request a new one.'
+      message: "OTP has expired. Please request a new one.",
     };
   }
 
@@ -255,7 +270,7 @@ export function verifyOTP(email: string, inputOTP: string): { success: boolean; 
   if (otpData.used) {
     return {
       success: false,
-      message: 'OTP has already been used. Please request a new one.'
+      message: "OTP has already been used. Please request a new one.",
     };
   }
 
@@ -264,7 +279,7 @@ export function verifyOTP(email: string, inputOTP: string): { success: boolean; 
     otpStorage.delete(email);
     return {
       success: false,
-      message: 'Too many failed attempts. Please request a new OTP.'
+      message: "Too many failed attempts. Please request a new OTP.",
     };
   }
 
@@ -273,7 +288,7 @@ export function verifyOTP(email: string, inputOTP: string): { success: boolean; 
     otpData.attempts++;
     return {
       success: false,
-      message: `Invalid OTP. ${3 - otpData.attempts} attempts remaining.`
+      message: `Invalid OTP. ${3 - otpData.attempts} attempts remaining.`,
     };
   }
 
@@ -283,7 +298,7 @@ export function verifyOTP(email: string, inputOTP: string): { success: boolean; 
 
   return {
     success: true,
-    message: 'OTP verified successfully.'
+    message: "OTP verified successfully.",
   };
 }
 
@@ -297,7 +312,10 @@ export function getOTPStatus(email: string) {
     expires: new Date(otpData.expires),
     attempts: otpData.attempts,
     used: otpData.used,
-    timeRemaining: Math.max(0, Math.ceil((otpData.expires - Date.now()) / 1000))
+    timeRemaining: Math.max(
+      0,
+      Math.ceil((otpData.expires - Date.now()) / 1000),
+    ),
   };
 }
 

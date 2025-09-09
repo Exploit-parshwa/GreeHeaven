@@ -13,16 +13,19 @@ const getPlantById = async (id: string): Promise<Plant | undefined> => {
 // Get cart contents
 export const getCart: RequestHandler = (req, res) => {
   try {
-    const sessionId = req.headers['session-id'] as string || 'default';
+    const sessionId = (req.headers["session-id"] as string) || "default";
     const cartItems = carts.get(sessionId) || [];
-    
-    const total = cartItems.reduce((sum, item) => sum + (item.plant.price * item.quantity), 0);
+
+    const total = cartItems.reduce(
+      (sum, item) => sum + item.plant.price * item.quantity,
+      0,
+    );
     const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
     const response: CartResponse = {
       items: cartItems,
       total,
-      itemCount
+      itemCount,
     };
 
     res.json(response);
@@ -35,10 +38,12 @@ export const getCart: RequestHandler = (req, res) => {
 export const addToCart: RequestHandler = async (req, res) => {
   try {
     const { plantId, quantity = 1 } = req.body;
-    const sessionId = req.headers['session-id'] as string || 'default';
+    const sessionId = (req.headers["session-id"] as string) || "default";
 
     if (!plantId) {
-      return res.status(400).json({ message: "Plant ID is required", status: 400 });
+      return res
+        .status(400)
+        .json({ message: "Plant ID is required", status: 400 });
     }
 
     const plant = await getPlantById(plantId);
@@ -47,11 +52,15 @@ export const addToCart: RequestHandler = async (req, res) => {
     }
 
     if (!plant.inStock || plant.stockQuantity < quantity) {
-      return res.status(400).json({ message: "Insufficient stock", status: 400 });
+      return res
+        .status(400)
+        .json({ message: "Insufficient stock", status: 400 });
     }
 
     let cartItems = carts.get(sessionId) || [];
-    const existingItemIndex = cartItems.findIndex(item => item.plantId === plantId);
+    const existingItemIndex = cartItems.findIndex(
+      (item) => item.plantId === plantId,
+    );
 
     if (existingItemIndex >= 0) {
       // Update existing item
@@ -61,20 +70,23 @@ export const addToCart: RequestHandler = async (req, res) => {
       const newItem: CartItem = {
         plantId,
         quantity,
-        plant
+        plant,
       };
       cartItems.push(newItem);
     }
 
     carts.set(sessionId, cartItems);
 
-    const total = cartItems.reduce((sum, item) => sum + (item.plant.price * item.quantity), 0);
+    const total = cartItems.reduce(
+      (sum, item) => sum + item.plant.price * item.quantity,
+      0,
+    );
     const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
     const response: CartResponse = {
       items: cartItems,
       total,
-      itemCount
+      itemCount,
     };
 
     res.json(response);
@@ -87,17 +99,21 @@ export const addToCart: RequestHandler = async (req, res) => {
 export const updateCartItem: RequestHandler = (req, res) => {
   try {
     const { plantId, quantity } = req.body;
-    const sessionId = req.headers['session-id'] as string || 'default';
+    const sessionId = (req.headers["session-id"] as string) || "default";
 
     if (!plantId || quantity < 0) {
-      return res.status(400).json({ message: "Invalid plant ID or quantity", status: 400 });
+      return res
+        .status(400)
+        .json({ message: "Invalid plant ID or quantity", status: 400 });
     }
 
     let cartItems = carts.get(sessionId) || [];
-    const itemIndex = cartItems.findIndex(item => item.plantId === plantId);
+    const itemIndex = cartItems.findIndex((item) => item.plantId === plantId);
 
     if (itemIndex === -1) {
-      return res.status(404).json({ message: "Item not found in cart", status: 404 });
+      return res
+        .status(404)
+        .json({ message: "Item not found in cart", status: 404 });
     }
 
     if (quantity === 0) {
@@ -110,13 +126,16 @@ export const updateCartItem: RequestHandler = (req, res) => {
 
     carts.set(sessionId, cartItems);
 
-    const total = cartItems.reduce((sum, item) => sum + (item.plant.price * item.quantity), 0);
+    const total = cartItems.reduce(
+      (sum, item) => sum + item.plant.price * item.quantity,
+      0,
+    );
     const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
     const response: CartResponse = {
       items: cartItems,
       total,
-      itemCount
+      itemCount,
     };
 
     res.json(response);
@@ -129,19 +148,22 @@ export const updateCartItem: RequestHandler = (req, res) => {
 export const removeFromCart: RequestHandler = (req, res) => {
   try {
     const { plantId } = req.params;
-    const sessionId = req.headers['session-id'] as string || 'default';
+    const sessionId = (req.headers["session-id"] as string) || "default";
 
     let cartItems = carts.get(sessionId) || [];
-    cartItems = cartItems.filter(item => item.plantId !== plantId);
+    cartItems = cartItems.filter((item) => item.plantId !== plantId);
     carts.set(sessionId, cartItems);
 
-    const total = cartItems.reduce((sum, item) => sum + (item.plant.price * item.quantity), 0);
+    const total = cartItems.reduce(
+      (sum, item) => sum + item.plant.price * item.quantity,
+      0,
+    );
     const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
     const response: CartResponse = {
       items: cartItems,
       total,
-      itemCount
+      itemCount,
     };
 
     res.json(response);
@@ -153,13 +175,13 @@ export const removeFromCart: RequestHandler = (req, res) => {
 // Clear cart
 export const clearCart: RequestHandler = (req, res) => {
   try {
-    const sessionId = req.headers['session-id'] as string || 'default';
+    const sessionId = (req.headers["session-id"] as string) || "default";
     carts.delete(sessionId);
 
     const response: CartResponse = {
       items: [],
       total: 0,
-      itemCount: 0
+      itemCount: 0,
     };
 
     res.json(response);
