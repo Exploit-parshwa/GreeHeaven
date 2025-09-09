@@ -205,7 +205,7 @@ export default function Auth() {
       const success = await login(email, otp, isRegistration);
 
       if (success) {
-        setMessage('Login successful! Welcome to GreenHaven ���');
+        setMessage('Login successful! Welcome to GreenHeaven ���');
         setTimeout(() => {
           navigate('/');
         }, 1000);
@@ -254,7 +254,7 @@ export default function Auth() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Leaf className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold text-foreground">GreenHaven</span>
+              <span className="text-xl font-bold text-foreground">GreenHeaven</span>
             </Link>
             
             <Link to="/" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -271,7 +271,7 @@ export default function Auth() {
               <Leaf className="w-8 h-8 text-primary animate-leaf-sway" />
             </div>
             <h1 className="text-3xl font-bold text-foreground mb-2">
-              Welcome to GreenHaven
+              Welcome to GreenHeaven
             </h1>
             <p className="text-muted-foreground">
               Join our community of plant enthusiasts
