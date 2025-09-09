@@ -107,6 +107,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (data.token) {
         localStorage.setItem('authToken', data.token);
+        localStorage.setItem('authUser', JSON.stringify(data.user));
         setUser(data.user);
         return true;
       }
@@ -181,6 +182,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (data.token) {
         localStorage.setItem('authToken', data.token);
+        localStorage.setItem('authUser', JSON.stringify(data.user));
         setUser(data.user);
         return true;
       }
