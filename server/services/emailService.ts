@@ -134,11 +134,11 @@ export async function sendOTPEmail(
 
     const mailOptions = {
       from: {
-        name: "GreenHaven Plant Store",
+        name: "GreenHeaven Plant Store",
         address: process.env.FROM_EMAIL || "Parshwakalantre33@gmail.com",
       },
       to: email,
-      subject: "Your Login OTP - GreenHaven Admin",
+      subject: "Your Login OTP - GreenHeaven Admin",
       html: `
         <!DOCTYPE html>
         <html>
@@ -159,7 +159,7 @@ export async function sendOTPEmail(
         <body>
           <div class="container">
             <div class="header">
-              <h1>🌿 GreenHaven Admin Login</h1>
+              <h1>🌿 GreenHeaven Admin Login</h1>
               <p>Your secure login code</p>
             </div>
             <div class="content">
@@ -184,7 +184,7 @@ export async function sendOTPEmail(
               <p>If you're having trouble, please contact the system administrator.</p>
             </div>
             <div class="footer">
-              <p>© 2024 GreenHaven Plant Store - Admin Panel</p>
+              <p>© 2024 GreenHeaven Plant Store - Admin Panel</p>
               <p>This is an automated message, please do not reply.</p>
             </div>
           </div>
@@ -192,7 +192,7 @@ export async function sendOTPEmail(
         </html>
       `,
       text: `
-        GreenHaven Admin Login OTP
+        GreenHeaven Admin Login OTP
         
         Your login code is: ${otp}
         
@@ -200,7 +200,7 @@ export async function sendOTPEmail(
         
         If you didn't request this login, please ignore this email.
         
-        © 2024 GreenHaven Plant Store
+        © 2024 GreenHeaven Plant Store
       `,
     };
 

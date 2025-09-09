@@ -80,7 +80,7 @@ export default function Index() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Leaf className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold text-foreground">GreenHaven</span>
+              <span className="text-xl font-bold text-foreground">GreenHeaven</span>
             </div>
 
             {/* Search */}
@@ -466,7 +466,7 @@ export default function Index() {
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                   <Leaf className="w-5 h-5 text-plant-forest" />
                 </div>
-                <span className="text-xl font-bold">GreenHaven</span>
+                <span className="text-xl font-bold">GreenHeaven</span>
               </div>
               <p className="text-white/80">
                 Your trusted partner in creating beautiful, thriving plant collections for every space.
@@ -505,7 +505,7 @@ export default function Index() {
           </div>
           
           <div className="border-t border-white/20 mt-8 pt-8 text-center text-white/60">
-            <p>&copy; 2024 GreenHaven. All rights reserved. Made with 🌱 for plant lovers.</p>
+            <p>&copy; 2024 GreenHeaven. All rights reserved. Made with 🌱 for plant lovers.</p>
           </div>
         </div>
       </footer>
