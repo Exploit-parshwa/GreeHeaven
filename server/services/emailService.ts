@@ -62,7 +62,7 @@ function createTransporter() {
 
     // Try custom SMTP
     if (process.env.SMTP_HOST && process.env.SMTP_USER) {
-      transporter = nodemailer.createTransporter(emailConfig.smtp);
+      transporter = nodemailer.createTransport(emailConfig.smtp);
       console.log('📧 Using custom SMTP for email service');
       return transporter;
     }
