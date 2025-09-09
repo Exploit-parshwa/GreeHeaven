@@ -126,10 +126,10 @@ export default function Checkout() {
 
   const initiateUPIPayment = (orderId: string, amount: number) => {
     const merchantUPI = 'parshwakalantre@okaxis';
-    const transactionNote = `GreenHaven Order ${orderId}`;
+    const transactionNote = `GreenHeaven Order ${orderId}`;
 
     // Create UPI payment URL
-    const upiUrl = `upi://pay?pa=${merchantUPI}&pn=GreenHaven&am=${amount}&cu=INR&tn=${encodeURIComponent(transactionNote)}&mc=0000&mode=02&purpose=00`;
+    const upiUrl = `upi://pay?pa=${merchantUPI}&pn=GreenHeaven&am=${amount}&cu=INR&tn=${encodeURIComponent(transactionNote)}&mc=0000&mode=02&purpose=00`;
 
     // Try to open UPI app first
     const upiLink = document.createElement('a');
