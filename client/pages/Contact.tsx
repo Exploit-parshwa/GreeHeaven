@@ -132,7 +132,7 @@ export default function Contact() {
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Leaf className="w-5 h-5 text-primary-foreground" />
                 </div>
-                <span className="text-xl font-bold text-foreground">GreenHaven</span>
+                <span className="text-xl font-bold text-foreground">GreenHeaven</span>
               </Link>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function Contact() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Leaf className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold text-foreground">GreenHaven</span>
+              <span className="text-xl font-bold text-foreground">GreenHeaven</span>
             </Link>
             
             <div className="hidden md:flex items-center space-x-2 text-muted-foreground">
@@ -419,7 +419,7 @@ export default function Contact() {
                 <CardContent>
                   <div className="space-y-3">
                     <div>
-                      <p className="font-medium">GreenHaven Plant Nursery</p>
+                      <p className="font-medium">GreenHeaven Plant Nursery</p>
                       <p className="text-sm text-muted-foreground">
                         123 Garden Street<br />
                         Bandra West, Mumbai<br />
