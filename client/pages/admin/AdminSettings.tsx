@@ -40,7 +40,7 @@ interface Settings {
 
 export default function AdminSettings() {
   const [settings, setSettings] = useState<Settings>({
-    siteName: 'GreenHaven Plant Store',
+    siteName: 'GreenHeaven Plant Store',
     siteDescription: 'Your trusted source for beautiful, healthy plants',
     siteUrl: 'https://greenhaven.com',
     adminEmail: 'admin@greenhaven.com',
