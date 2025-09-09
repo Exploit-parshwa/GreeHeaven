@@ -2,6 +2,9 @@ import { RequestHandler } from "express";
 import { Plant, PlantsResponse, PlantResponse, PlantFilters } from "@shared/api";
 
 // In-memory plant data store (in production, this would be a database)
+export function getAllPlantData(): Plant[] { return plants; }
+export function findPlantById(id: string): Plant | undefined { return plants.find(p => p.id === id); }
+
 let plants: Plant[] = [
   // Exotic Vegetables (10 items)
   {
