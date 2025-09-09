@@ -1,4 +1,4 @@
-# 🗄️ Database Setup Guide for GreenHaven
+# 🗄️ Database Setup Guide for GreenHeaven
 
 ## Database Options for Your Plant E-commerce Site
 
