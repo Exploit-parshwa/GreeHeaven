@@ -52,7 +52,7 @@ export default function IndoorPlants() {
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Leaf className="w-5 h-5 text-primary-foreground" />
                 </div>
-                <span className="text-xl font-bold text-foreground">GreenHaven</span>
+                <span className="text-xl font-bold text-foreground">GreenHeaven</span>
               </Link>
               
               <div className="hidden md:flex items-center space-x-2 text-muted-foreground">
@@ -255,7 +255,7 @@ export default function IndoorPlants() {
       <section className="py-16 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-foreground mb-12">
-            Why Choose Indoor Plants from GreenHaven?
+            Why Choose Indoor Plants from GreenHeaven?
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center space-y-4">
