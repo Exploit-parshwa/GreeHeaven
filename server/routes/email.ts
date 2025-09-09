@@ -37,11 +37,11 @@ export const sendOTP: RequestHandler = async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_USER || 'noreply@greenhaven.com',
       to: email,
-      subject: '🌿 Your GreenHaven OTP Code',
+      subject: '🌿 Your GreenHeaven OTP Code',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #22c55e; margin-bottom: 10px;">🌿 GreenHaven</h1>
+            <h1 style="color: #22c55e; margin-bottom: 10px;">🌿 GreenHeaven</h1>
             <p style="color: #666; font-size: 16px;">Your Plant Paradise Awaits</p>
           </div>
           
@@ -56,7 +56,7 @@ export const sendOTP: RequestHandler = async (req, res) => {
           
           <div style="text-align: center; margin-top: 30px; color: #999; font-size: 12px;">
             <p>🌱 Growing together with nature</p>
-            <p>GreenHaven - Your trusted plant partner</p>
+            <p>GreenHeaven - Your trusted plant partner</p>
           </div>
         </div>
       `
@@ -162,7 +162,7 @@ export const sendOrderConfirmation: RequestHandler = async (req, res) => {
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="color: #22c55e; margin-bottom: 10px;">🌿 GreenHaven</h1>
+            <h1 style="color: #22c55e; margin-bottom: 10px;">🌿 GreenHeaven</h1>
             <p style="color: #666; font-size: 16px;">Your Plant Paradise</p>
           </div>
           
@@ -202,7 +202,7 @@ export const sendOrderConfirmation: RequestHandler = async (req, res) => {
           
           <div style="text-align: center; margin-top: 30px; color: #999; font-size: 12px;">
             <p>🌱 Growing together with nature</p>
-            <p>GreenHaven - Where every plant finds its perfect home</p>
+            <p>GreenHeaven - Where every plant finds its perfect home</p>
           </div>
         </div>
       `
