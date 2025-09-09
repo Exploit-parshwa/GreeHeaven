@@ -69,6 +69,7 @@ const App = () => (
           <Route path="/sustainability" element={<Sustainability />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/blog" element={<PlaceholderPage title="Plant Blog" description="Tips, tricks, and plant stories" />} />
+          <Route path="/terms" element={<PlaceholderPage title="Terms & Conditions" description="Our terms and policies" />} />
 
           {/* Admin Routes - Protected */}
           <Route path="/admin" element={
