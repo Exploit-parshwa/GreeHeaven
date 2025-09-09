@@ -28,6 +28,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const checkAuth = async () => {
     try {
       const token = localStorage.getItem('authToken');
+      const storedUser = localStorage.getItem('authUser');
+
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch {}
+      }
+
       if (!token) {
         setIsLoading(false);
         return;
@@ -42,12 +50,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (response.ok) {
         const data = await response.json();
         setUser(data.user);
-      } else {
-        localStorage.removeItem('authToken');
+        localStorage.setItem('authUser', JSON.stringify(data.user));
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      localStorage.removeItem('authToken');
     } finally {
       setIsLoading(false);
     }
