@@ -48,7 +48,7 @@ function createTransporter() {
   try {
     // Try Gmail first
     if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-      transporter = nodemailer.createTransporter(emailConfig.gmail);
+      transporter = nodemailer.createTransport(emailConfig.gmail);
       console.log('📧 Using Gmail SMTP for email service');
       return transporter;
     }
