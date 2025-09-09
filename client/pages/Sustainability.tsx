@@ -117,7 +117,7 @@ export default function Sustainability() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Leaf className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold text-foreground">GreenHaven</span>
+              <span className="text-xl font-bold text-foreground">GreenHeaven</span>
             </Link>
             
             <Link to="/" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
