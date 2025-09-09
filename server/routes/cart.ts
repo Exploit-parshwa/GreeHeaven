@@ -1,94 +1,13 @@
 import { RequestHandler } from "express";
 import { CartItem, CartResponse, Plant } from "@shared/api";
+import { findPlantById } from "./plants";
 
 // Simple in-memory cart storage (in production, use database with user sessions)
 const carts: Map<string, CartItem[]> = new Map();
 
-
-// Import the complete plant database - we'll create a shared module
+// Resolve plant details from in-memory dataset to work in serverless environments
 const getPlantById = async (id: string): Promise<Plant | undefined> => {
-  try {
-    // Use a simple HTTP request to get plant data from our own API
-    const fetch = (await import('node-fetch')).default;
-    const response = await fetch(`http://localhost:8080/api/plants/${id}`);
-    if (response.ok) {
-      const data = await response.json();
-      return data.plant;
-    }
-  } catch (error) {
-    console.error('Error fetching plant for cart:', error);
-    // Fallback to basic plant data if API call fails
-    const basicPlants: Plant[] = [
-      {
-        id: "bird-of-paradise",
-        name: "Bird of Paradise Plant",
-        description: "A stunning tropical plant with large, paddle-shaped leaves and exotic orange and blue flowers.",
-        price: 1499,
-        originalPrice: 1799,
-        category: "rare",
-        images: ["https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=800&h=800&fit=crop"],
-        inStock: true,
-        stockQuantity: 12,
-        features: ["Exotic flowers", "Large decorative leaves", "Air purifying"],
-        careLevel: "Medium",
-        sunlight: "High",
-        watering: "Medium",
-        petFriendly: false,
-        lowMaintenance: false,
-        rating: 4.8,
-        reviewCount: 156,
-        featured: true,
-        trending: true,
-        new: false
-      },
-      {
-        id: "monstera-deliciosa",
-        name: "Monstera Deliciosa",
-        description: "The iconic Swiss cheese plant with beautiful split leaves. A stunning statement piece for any modern home.",
-        price: 899,
-        originalPrice: 1099,
-        category: "indoor",
-        images: ["https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=800&fit=crop"],
-        inStock: true,
-        stockQuantity: 30,
-        features: ["Split leaves", "Air purifying", "Fast growing"],
-        careLevel: "Easy",
-        sunlight: "Medium",
-        watering: "Medium",
-        petFriendly: false,
-        lowMaintenance: true,
-        rating: 4.8,
-        reviewCount: 567,
-        featured: true,
-        trending: true,
-        new: false
-      },
-      {
-        id: "snake-plant",
-        name: "Snake Plant (Sansevieria)",
-        description: "Nearly indestructible plant perfect for beginners. Excellent air purifier that thrives in low light conditions.",
-        price: 599,
-        originalPrice: 799,
-        category: "indoor",
-        images: ["https://images.unsplash.com/photo-1572688484438-313a6e50c333?w=800&h=800&fit=crop"],
-        inStock: true,
-        stockQuantity: 50,
-        features: ["Low light tolerant", "Air purifying", "Very low maintenance"],
-        careLevel: "Easy",
-        sunlight: "Low",
-        watering: "Low",
-        petFriendly: false,
-        lowMaintenance: true,
-        rating: 4.9,
-        reviewCount: 1203,
-        featured: true,
-        trending: false,
-        new: false
-      }
-    ];
-    return basicPlants.find(plant => plant.id === id);
-  }
-  return undefined;
+  return findPlantById(id);
 };
 
 // Get cart contents
