@@ -1,7 +1,72 @@
 import { Request, Response, Router } from "express";
 import { sendOrderConfirmation } from "./email";
+import { supabase } from "../../lib/supabase";
 
 const router = Router();
+
+async function saveOrderToSupabase(order: Order) {
+  try {
+    const { data: orderRow, error: orderError } = await supabase
+      .from('orders')
+      .insert({
+        order_number: order.id,
+        customer_name: order.customerName,
+        customer_email: order.customerEmail,
+        customer_phone: order.customerPhone,
+        shipping_address: order.shippingAddress,
+        subtotal: order.subtotal,
+        shipping_cost: order.shipping,
+        tax_amount: 0,
+        total_amount: order.total,
+        status: order.status,
+        payment_status: order.paymentStatus,
+        payment_method: order.paymentMethod
+      })
+      .select()
+      .single();
+
+    if (orderError) throw orderError;
+
+    const createdOrderId = orderRow.id;
+
+    const itemsPayload = order.items.map((it) => ({
+      order_id: createdOrderId,
+      plant_id: it.plantId,
+      plant_name: it.plantName,
+      quantity: it.quantity,
+      unit_price: it.price,
+      total_price: it.totalPrice
+    }));
+
+    const { error: itemsError } = await supabase
+      .from('order_items')
+      .insert(itemsPayload);
+
+    if (itemsError) throw itemsError;
+
+    return true;
+  } catch (e) {
+    console.warn('Supabase order save failed, falling back to in-memory only:', (e as any)?.message || e);
+    return false;
+  }
+}
+
+async function updateOrderStatusInSupabase(orderNumber: string, updates: Partial<{ status: string; payment_status: string }>) {
+  try {
+    const { error } = await supabase
+      .from('orders')
+      .update({
+        status: updates.status,
+        payment_status: updates.payment_status
+      })
+      .eq('order_number', orderNumber);
+    if (error) throw error;
+    return true;
+  } catch (e) {
+    console.warn('Supabase order update failed:', (e as any)?.message || e);
+    return false;
+  }
+}
 
 // Order interface
 interface Order {
@@ -86,6 +151,9 @@ router.post('/create-pending', async (req: Request, res: Response) => {
     // Store pending order
     orders.set(orderId, order);
 
+    // Persist to Supabase (best-effort)
+    await saveOrderToSupabase(order);
+
     res.json({
       message: "Pending order created successfully",
       success: true,
@@ -131,6 +199,9 @@ router.post('/confirm-payment', async (req: Request, res: Response) => {
     order.paymentStatus = paymentStatus;
     order.updatedAt = new Date();
     orders.set(orderId, order);
+
+    // Update Supabase (best-effort)
+    await updateOrderStatusInSupabase(order.id, { status: order.status, payment_status: order.paymentStatus });
 
     // Send order confirmation email
     try {
@@ -220,6 +291,9 @@ router.post('/', async (req: Request, res: Response) => {
 
     // Store order
     orders.set(orderId, order);
+
+    // Persist to Supabase (best-effort)
+    await saveOrderToSupabase(order);
 
     // Send order confirmation email
     try {
