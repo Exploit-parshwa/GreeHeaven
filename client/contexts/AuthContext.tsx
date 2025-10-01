@@ -13,6 +13,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (email: string, otp: string, isRegistration?: boolean) => Promise<boolean>;
   loginWithPassword: (email: string, password: string) => Promise<boolean>;
+  loginWithGoogle: () => Promise<void>;
   register: (name: string, email: string, phone: string, password: string) => Promise<{ success: boolean; demoOtp?: string; error?: string }>;
   sendLoginOtp: (email: string) => Promise<{ success: boolean; demoOtp?: string }>;
   logout: () => void;
@@ -21,12 +22,30 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+import { supabase } from '../../lib/supabase';
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const checkAuth = async () => {
     try {
+      // Check Supabase session first
+      const { data: supaUserData } = await supabase.auth.getUser();
+      if (supaUserData?.user) {
+        const supaUser = supaUserData.user;
+        const mappedUser: User = {
+          id: supaUser.id,
+          email: supaUser.email || '',
+          name: (supaUser.user_metadata && (supaUser.user_metadata.full_name || supaUser.user_metadata.name)) || undefined,
+          isAdmin: false
+        };
+        setUser(mappedUser);
+        localStorage.setItem('authUser', JSON.stringify(mappedUser));
+        setIsLoading(false);
+        return;
+      }
+
       const token = localStorage.getItem('authToken');
       const storedUser = localStorage.getItem('authUser');
 
@@ -61,6 +80,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     checkAuth();
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        const mappedUser: User = {
+          id: session.user.id,
+          email: session.user.email || '',
+          name: (session.user.user_metadata && (session.user.user_metadata.full_name || session.user.user_metadata.name)) || undefined,
+          isAdmin: false
+        };
+        setUser(mappedUser);
+        localStorage.setItem('authUser', JSON.stringify(mappedUser));
+      } else {
+        // keep existing local auth if any
+      }
+    });
+    return () => { sub?.subscription?.unsubscribe?.(); };
   }, []);
 
   const sendLoginOtp = async (email: string): Promise<{ success: boolean; demoOtp?: string }> => {
@@ -123,6 +157,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('Password login failed:', error);
       return false;
     }
+  };
+
+  const loginWithGoogle = async (): Promise<void> => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin }
+    });
   };
 
   const register = async (name: string, email: string, phone: string, password: string): Promise<{ success: boolean; demoOtp?: string; error?: string }> => {
@@ -200,7 +241,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try { await supabase.auth.signOut(); } catch {}
     localStorage.removeItem('authToken');
     localStorage.removeItem('authUser');
     setUser(null);
@@ -212,6 +254,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isLoading,
     login,
     loginWithPassword,
+    loginWithGoogle,
     register,
     sendLoginOtp,
     logout,
