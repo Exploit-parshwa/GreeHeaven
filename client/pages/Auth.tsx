@@ -48,7 +48,7 @@ export default function Auth() {
   const [otpEmailSent, setOtpEmailSent] = useState(false);
   const [adminOtp, setAdminOtp] = useState('');
 
-  const { login, loginWithPassword, register, sendLoginOtp } = useAuth();
+  const { login, loginWithPassword, register, sendLoginOtp, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   // Send OTP to admin email
@@ -132,31 +132,19 @@ export default function Auth() {
     setError('');
 
     try {
-      // Try password login first if password is provided
-      if (loginData.password) {
-        const success = await loginWithPassword(loginData.email, loginData.password);
-        if (success) {
-          setMessage('Login successful! Welcome back! 🌿');
-          setTimeout(() => {
-            navigate('/');
-          }, 1000);
-          return;
-        } else {
-          setError('Invalid email or password. Try OTP login instead.');
-        }
+      if (!loginData.password) {
+        setError('Enter your password or use Google to continue.');
+        return;
+      }
+      const success = await loginWithPassword(loginData.email, loginData.password);
+      if (success) {
+        setMessage('Login successful! Welcome back! 🌿');
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+        return;
       } else {
-        // Fall back to OTP login
-        const result = await sendLoginOtp(loginData.email);
-        if (result.success) {
-          setOtpSent(true);
-          setIsRegistration(false);
-          setMessage('OTP sent to your email!');
-          if (result.demoOtp) {
-            setDemoOtp(result.demoOtp);
-          }
-        } else {
-          setError('Failed to send OTP. Please try again.');
-        }
+        setError('Invalid email or password.');
       }
     } catch (err) {
       setError('An error occurred. Please try again.');
@@ -294,12 +282,11 @@ export default function Auth() {
 
                     {/* Login Instructions */}
                     <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
-                      <strong>📧 OTP-Based Login:</strong>
+                      <strong>🔐 Login options:</strong>
                       <ul className="mt-1 text-xs">
-                        <li>• Use email + password if you have an account</li>
-                        <li>• Use "Login with OTP" - Real OTP sent to your email</li>
-                        <li>• Email verification required for all new accounts</li>
-                        <li>• Admin access automatically granted for admin emails</li>
+                        <li>• Use email + password</li>
+                        <li>• Or continue with Google</li>
+                        <li>• OTP is required only during new account sign-up</li>
                       </ul>
                     </div>
 
@@ -385,22 +372,10 @@ export default function Auth() {
                           <Button
                             type="button"
                             variant="outline"
-                            onClick={sendOtpToEmail}
+                            onClick={loginWithGoogle}
                             className="w-full"
-                            disabled={!loginData.email}
                           >
-                            <Mail className="w-4 h-4 mr-2" />
-                            Login with OTP
-                          </Button>
-
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setLoginData({...loginData, email: 'test@example.com'})}
-                            className="w-full text-xs"
-                          >
-                            Quick Test (Fill test@example.com)
+                            Continue with Google
                           </Button>
                         </div>
                       </form>
@@ -478,7 +453,7 @@ export default function Auth() {
 
                     {/* Demo Mode Notice */}
                     <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg text-blue-700 text-sm">
-                      <strong>Demo Mode:</strong> Since email is not configured, OTP will be shown in a popup for testing purposes.
+                      <strong>Sign-up Verification:</strong> We'll send an OTP to your email to verify your account.
                     </div>
 
                     {/* Success/Error Messages */}
