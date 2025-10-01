@@ -109,7 +109,7 @@ export default function Auth() {
       if (data.success) {
         // Store auth data
         localStorage.setItem('authToken', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('authUser', JSON.stringify(data.user));
 
         // Update auth context
         window.location.reload(); // Simple way to refresh auth state
