@@ -2044,29 +2044,53 @@ export const getPlantById: RequestHandler = (req, res) => {
 };
 
 // Get featured plants
-export const getFeaturedPlants: RequestHandler = (req, res) => {
-  const featuredPlants = plants.filter((plant) => plant.featured).slice(0, 9);
-  const response: PlantsResponse = {
-    plants: featuredPlants,
-    total: featuredPlants.length,
-    page: 1,
-    limit: 9,
-    totalPages: 1,
-  };
-  res.json(response);
+export const getFeaturedPlants: RequestHandler = (_req, res) => {
+  try {
+    const featuredPlants = plants.filter((plant) => plant.featured).slice(0, 9);
+    const response: PlantsResponse = {
+      plants: featuredPlants,
+      total: featuredPlants.length,
+      page: 1,
+      limit: 9,
+      totalPages: 1,
+    };
+    res.json(response);
+  } catch (err) {
+    console.error('Error in getFeaturedPlants:', err);
+    const response: PlantsResponse = {
+      plants: [],
+      total: 0,
+      page: 1,
+      limit: 9,
+      totalPages: 0,
+    };
+    res.status(500).json(response);
+  }
 };
 
 // Get trending plants
-export const getTrendingPlants: RequestHandler = (req, res) => {
-  const trendingPlants = plants.filter((plant) => plant.trending).slice(0, 8);
-  const response: PlantsResponse = {
-    plants: trendingPlants,
-    total: trendingPlants.length,
-    page: 1,
-    limit: 8,
-    totalPages: 1,
-  };
-  res.json(response);
+export const getTrendingPlants: RequestHandler = (_req, res) => {
+  try {
+    const trendingPlants = plants.filter((plant) => plant.trending).slice(0, 8);
+    const response: PlantsResponse = {
+      plants: trendingPlants,
+      total: trendingPlants.length,
+      page: 1,
+      limit: 8,
+      totalPages: 1,
+    };
+    res.json(response);
+  } catch (err) {
+    console.error('Error in getTrendingPlants:', err);
+    const response: PlantsResponse = {
+      plants: [],
+      total: 0,
+      page: 1,
+      limit: 8,
+      totalPages: 0,
+    };
+    res.status(500).json(response);
+  }
 };
 
 // Get plants by category
