@@ -39,9 +39,10 @@ export default function Index() {
   const fetchFeaturedPlants = async () => {
     try {
       const response = await fetch("/api/plants/featured");
-      const data = (await response.json()) as PlantsResponse;
-      // Limit to 9 featured plants for home page as requested
-      setFeaturedPlants(data.plants.slice(0, 9));
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = (await response.json()) as Partial<PlantsResponse>;
+      const list = Array.isArray(data.plants) ? data.plants : [];
+      setFeaturedPlants(list.slice(0, 9));
     } catch (error) {
       console.error("Error fetching featured plants:", error);
     }
