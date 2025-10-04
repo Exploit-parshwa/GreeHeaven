@@ -51,9 +51,10 @@ export default function Index() {
   const fetchTrendingPlants = async () => {
     try {
       const response = await fetch("/api/plants/trending");
-      const data = (await response.json()) as PlantsResponse;
-      // Limit to 8 trending plants for home page as requested
-      setTrendingPlants(data.plants.slice(0, 8));
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = (await response.json()) as Partial<PlantsResponse>;
+      const list = Array.isArray(data.plants) ? data.plants : [];
+      setTrendingPlants(list.slice(0, 8));
       setLoading(false);
     } catch (error) {
       console.error("Error fetching trending plants:", error);
