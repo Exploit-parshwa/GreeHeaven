@@ -568,8 +568,8 @@ export default function Auth() {
                         </Label>
                       </div>
 
-                      <Button 
-                        type="submit" 
+                      <Button
+                        type="submit"
                         className="w-full btn-plant h-11"
                         disabled={isLoading || registerData.password !== registerData.confirmPassword}
                       >
@@ -582,6 +582,23 @@ export default function Auth() {
                           'Create Account'
                         )}
                       </Button>
+
+                      <div className="flex items-center my-2">
+                        <div className="flex-1 h-px bg-border" />
+                        <span className="px-2 text-xs text-muted-foreground">or</span>
+                        <div className="flex-1 h-px bg-border" />
+                      </div>
+
+                      <div className="text-center space-y-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={loginWithGoogle}
+                          className="w-full"
+                        >
+                          Sign up with Google
+                        </Button>
+                      </div>
                     </form>
                   </TabsContent>
 
