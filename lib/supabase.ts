@@ -7,13 +7,30 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('Supabase credentials not found. Using in-memory storage.')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: true
-  }
-})
+export const supabase = (supabaseUrl && supabaseAnonKey)
+  ? createClient(supabaseUrl, supabaseAnonKey, {
+      auth: {
+        autoRefreshToken: true,
+        persistSession: true,
+        detectSessionInUrl: true
+      }
+    })
+  : {
+      auth: {
+        async getUser() {
+          return { data: { user: null }, error: null } as any;
+        },
+        onAuthStateChange() {
+          return { data: { subscription: { unsubscribe: () => {} } } } as any;
+        },
+        async signInWithOAuth() {
+          console.warn('Supabase credentials missing: OAuth not available.');
+        },
+        async signOut() {
+          /* no-op */
+        },
+      },
+    } as any
 
 // Database interfaces
 export interface DatabaseUser {
