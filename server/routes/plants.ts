@@ -2056,7 +2056,7 @@ export const getFeaturedPlants: RequestHandler = (_req, res) => {
     };
     res.json(response);
   } catch (err) {
-    console.error('Error in getFeaturedPlants:', err);
+    console.error("Error in getFeaturedPlants:", err);
     const response: PlantsResponse = {
       plants: [],
       total: 0,
@@ -2081,7 +2081,7 @@ export const getTrendingPlants: RequestHandler = (_req, res) => {
     };
     res.json(response);
   } catch (err) {
-    console.error('Error in getTrendingPlants:', err);
+    console.error("Error in getTrendingPlants:", err);
     const response: PlantsResponse = {
       plants: [],
       total: 0,
