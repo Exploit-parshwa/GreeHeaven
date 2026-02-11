@@ -1,0 +1,1 @@
+Hello this is an folder that is used for nursery e-commerce just an small scale website that can be published it have all functionality of e-commerce also orders are done - payment system is used (UPI ID) not an payment gateway used in this !! 
