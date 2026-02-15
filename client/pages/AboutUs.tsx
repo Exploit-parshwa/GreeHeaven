@@ -82,7 +82,7 @@ export default function AboutUs() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Leaf className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold text-foreground">GreenHaven</span>
+              <span className="text-xl font-bold text-foreground">GreenHeaven</span>
             </Link>
             
             <Link to="/" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
@@ -98,13 +98,13 @@ export default function AboutUs() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-8">
             <Badge className="bg-plant-leaf/20 text-plant-forest border-plant-leaf/30">
-              🌿 About GreenHaven
+              🌿 About GreenHeaven
             </Badge>
             <h1 className="text-4xl lg:text-6xl font-bold text-foreground">
               Bringing Nature to Your Doorstep
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Founded in 2018, GreenHaven has been on a mission to make plant parenthood accessible, 
+              Founded in 2018, GreenHeaven has been on a mission to make plant parenthood accessible, 
               enjoyable, and successful for everyone. We believe every space deserves the beauty and 
               benefits of green life.
             </p>
@@ -132,7 +132,7 @@ export default function AboutUs() {
                   dreams of creating green, living spaces.
                 </p>
                 <p>
-                  Today, GreenHaven has grown from a passion project to a thriving community of plant enthusiasts. 
+                  Today, GreenHeaven has grown from a passion project to a thriving community of plant enthusiasts. 
                   We've helped over 50,000 people successfully grow their plant collections, transforming homes 
                   and offices into vibrant, healthy environments.
                 </p>
@@ -158,7 +158,7 @@ export default function AboutUs() {
               Our Values
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              These core values guide everything we do at GreenHaven
+              These core values guide everything we do at GreenHeaven
             </p>
           </div>
           

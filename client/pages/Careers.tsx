@@ -242,7 +242,7 @@ export default function Careers() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Leaf className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold text-foreground">GreenHaven</span>
+              <span className="text-xl font-bold text-foreground">GreenHeaven</span>
             </Link>
             
             <Link to="/" className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors">
@@ -261,7 +261,7 @@ export default function Careers() {
               🚀 Join Our Growing Team
             </Badge>
             <h1 className="text-4xl lg:text-6xl font-bold text-foreground">
-              Grow Your Career with GreenHaven
+              Grow Your Career with GreenHeaven
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Join a passionate team dedicated to bringing the beauty of nature into every home. 
@@ -557,7 +557,7 @@ export default function Careers() {
               </h2>
               <div className="space-y-4 text-muted-foreground">
                 <p>
-                  At GreenHaven, we believe that our team is our greatest asset. We've built a culture 
+                  At GreenHeaven, we believe that our team is our greatest asset. We've built a culture 
                   that encourages growth, creativity, and collaboration while maintaining a healthy 
                   work-life balance.
                 </p>

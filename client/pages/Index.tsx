@@ -1,7 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plant, PlantsResponse } from "@shared/api";
-import { ShoppingCart, Search, Menu, User, Heart, Star, ArrowRight, Leaf, TreePine, FlowerIcon, Sprout, Settings } from "lucide-react";
+import {
+  ShoppingCart,
+  Search,
+  Menu,
+  User,
+  Heart,
+  Star,
+  ArrowRight,
+  Leaf,
+  TreePine,
+  FlowerIcon,
+  Sprout,
+  Settings,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -29,8 +42,8 @@ export default function Index() {
       await addToCart(plantId, 1);
       // Optional: Show success notification
     } catch (error) {
-      console.error('Failed to add to cart:', error);
-      alert('Failed to add item to cart. Please try again.');
+      console.error("Failed to add to cart:", error);
+      alert("Failed to add item to cart. Please try again.");
     } finally {
       setAddingToCart(null);
     }
@@ -39,9 +52,10 @@ export default function Index() {
   const fetchFeaturedPlants = async () => {
     try {
       const response = await fetch("/api/plants/featured");
-      const data = (await response.json()) as PlantsResponse;
-      // Limit to 9 featured plants for home page as requested
-      setFeaturedPlants(data.plants.slice(0, 9));
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = (await response.json()) as Partial<PlantsResponse>;
+      const list = Array.isArray(data.plants) ? data.plants : [];
+      setFeaturedPlants(list.slice(0, 9));
     } catch (error) {
       console.error("Error fetching featured plants:", error);
     }
@@ -50,9 +64,10 @@ export default function Index() {
   const fetchTrendingPlants = async () => {
     try {
       const response = await fetch("/api/plants/trending");
-      const data = (await response.json()) as PlantsResponse;
-      // Limit to 8 trending plants for home page as requested
-      setTrendingPlants(data.plants.slice(0, 8));
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = (await response.json()) as Partial<PlantsResponse>;
+      const list = Array.isArray(data.plants) ? data.plants : [];
+      setTrendingPlants(list.slice(0, 8));
       setLoading(false);
     } catch (error) {
       console.error("Error fetching trending plants:", error);
@@ -61,12 +76,42 @@ export default function Index() {
   };
 
   const categories = [
-    { id: "flowering", name: "Flowering Plants", icon: FlowerIcon, color: "bg-pink-100 text-pink-600" },
-    { id: "indoor", name: "Indoor Plants", icon: Leaf, color: "bg-green-100 text-green-600" },
-    { id: "outdoor", name: "Outdoor Plants", icon: TreePine, color: "bg-emerald-100 text-emerald-600" },
-    { id: "succulents", name: "Succulents", icon: Sprout, color: "bg-teal-100 text-teal-600" },
-    { id: "bonsai", name: "Bonsai", icon: TreePine, color: "bg-amber-100 text-amber-600" },
-    { id: "herbs", name: "Herbs", icon: Leaf, color: "bg-lime-100 text-lime-600" },
+    {
+      id: "flowering",
+      name: "Flowering Plants",
+      icon: FlowerIcon,
+      color: "bg-pink-100 text-pink-600",
+    },
+    {
+      id: "indoor",
+      name: "Indoor Plants",
+      icon: Leaf,
+      color: "bg-green-100 text-green-600",
+    },
+    {
+      id: "outdoor",
+      name: "Outdoor Plants",
+      icon: TreePine,
+      color: "bg-emerald-100 text-emerald-600",
+    },
+    {
+      id: "succulents",
+      name: "Succulents",
+      icon: Sprout,
+      color: "bg-teal-100 text-teal-600",
+    },
+    {
+      id: "bonsai",
+      name: "Bonsai",
+      icon: TreePine,
+      color: "bg-amber-100 text-amber-600",
+    },
+    {
+      id: "herbs",
+      name: "Herbs",
+      icon: Leaf,
+      color: "bg-lime-100 text-lime-600",
+    },
   ];
 
   return (
@@ -80,15 +125,17 @@ export default function Index() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Leaf className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold text-foreground">GreenHaven</span>
+              <span className="text-xl font-bold text-foreground">
+                GreenHeaven
+              </span>
             </div>
 
             {/* Search */}
             <div className="hidden md:flex flex-1 max-w-md mx-8">
               <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                <Input 
-                  placeholder="Search plants..." 
+                <Input
+                  placeholder="Search plants..."
                   className="pl-10 bg-background/80"
                 />
               </div>
@@ -96,13 +143,22 @@ export default function Index() {
 
             {/* Navigation */}
             <nav className="hidden md:flex items-center space-x-6">
-              <Link to="/plants" className="text-foreground hover:text-primary transition-colors">
+              <Link
+                to="/plants"
+                className="text-foreground hover:text-primary transition-colors"
+              >
                 All Plants
               </Link>
-              <Link to="/care" className="text-foreground hover:text-primary transition-colors">
+              <Link
+                to="/care"
+                className="text-foreground hover:text-primary transition-colors"
+              >
                 Plant Care
               </Link>
-              <Link to="/about" className="text-foreground hover:text-primary transition-colors">
+              <Link
+                to="/about"
+                className="text-foreground hover:text-primary transition-colors"
+              >
                 About
               </Link>
             </nav>
@@ -146,7 +202,11 @@ export default function Index() {
               {/* Mobile Auth Button */}
               <Button asChild variant="ghost" size="icon" className="md:hidden">
                 <Link to={isAuthenticated ? "/admin" : "/auth"}>
-                  {isAuthenticated ? <Settings className="w-5 h-5" /> : <User className="w-5 h-5" />}
+                  {isAuthenticated ? (
+                    <Settings className="w-5 h-5" />
+                  ) : (
+                    <User className="w-5 h-5" />
+                  )}
                 </Link>
               </Button>
 
@@ -160,8 +220,12 @@ export default function Index() {
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-plant-sage/20 via-background to-plant-leaf/10 overflow-hidden">
-        <div className={"absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23059669\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"4\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"}></div>
-        
+        <div
+          className={
+            'absolute inset-0 bg-[url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23059669" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')] opacity-50'
+          }
+        ></div>
+
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8 animate-fade-in-up">
@@ -171,17 +235,23 @@ export default function Index() {
                 </Badge>
                 <h1 className="text-4xl lg:text-6xl font-bold text-foreground leading-tight">
                   Transform Your Space with
-                  <span className="text-gradient-plant block animate-plant-grow">Beautiful Plants</span>
+                  <span className="text-gradient-plant block animate-plant-grow">
+                    Beautiful Plants
+                  </span>
                 </h1>
                 <p className="text-lg text-muted-foreground max-w-lg">
-                  Discover our curated collection of premium plants, from exotic rarities to low-maintenance favorites.
-                  Perfect for every home and garden.
+                  Discover our curated collection of premium plants, from exotic
+                  rarities to low-maintenance favorites. Perfect for every home
+                  and garden.
                 </p>
               </div>
-              
+
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to="/plants">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8">
+                  <Button
+                    size="lg"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground px-8"
+                  >
                     Shop Collection
                     <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
@@ -196,15 +266,21 @@ export default function Index() {
               <div className="grid grid-cols-3 gap-6 pt-8">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">500+</div>
-                  <div className="text-sm text-muted-foreground">Plant Varieties</div>
+                  <div className="text-sm text-muted-foreground">
+                    Plant Varieties
+                  </div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">50k+</div>
-                  <div className="text-sm text-muted-foreground">Happy Customers</div>
+                  <div className="text-sm text-muted-foreground">
+                    Happy Customers
+                  </div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">99%</div>
-                  <div className="text-sm text-muted-foreground">Satisfaction Rate</div>
+                  <div className="text-sm text-muted-foreground">
+                    Satisfaction Rate
+                  </div>
                 </div>
               </div>
             </div>
@@ -224,7 +300,9 @@ export default function Index() {
                   </div>
                   <div>
                     <div className="font-semibold text-sm">Premium Quality</div>
-                    <div className="text-xs text-muted-foreground">Guaranteed Fresh</div>
+                    <div className="text-xs text-muted-foreground">
+                      Guaranteed Fresh
+                    </div>
                   </div>
                 </div>
               </div>
@@ -241,7 +319,8 @@ export default function Index() {
               Shop by Category
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Find the perfect plants for your space, lifestyle, and experience level
+              Find the perfect plants for your space, lifestyle, and experience
+              level
             </p>
           </div>
 
@@ -252,12 +331,19 @@ export default function Index() {
                 to={`/category/${category.id}`}
                 className="group"
               >
-                <Card className="plant-card hover-lift border-border/50 bg-card/50 backdrop-blur-sm animate-scale-in" style={{animationDelay: `${index * 0.1}s`}}>
+                <Card
+                  className="plant-card hover-lift border-border/50 bg-card/50 backdrop-blur-sm animate-scale-in"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
                   <CardContent className="p-6 text-center">
-                    <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center ${category.color} hover-grow`}>
+                    <div
+                      className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center ${category.color} hover-grow`}
+                    >
                       <category.icon className="w-8 h-8 animate-leaf-sway" />
                     </div>
-                    <h3 className="font-semibold text-foreground text-sm">{category.name}</h3>
+                    <h3 className="font-semibold text-foreground text-sm">
+                      {category.name}
+                    </h3>
                   </CardContent>
                 </Card>
               </Link>
@@ -301,33 +387,44 @@ export default function Index() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {featuredPlants.map((plant, index) => (
-                <Link key={plant.id} to={`/plant/${plant.id}`} className="group">
-                  <Card className="plant-card overflow-hidden plant-card-hover border-border/50 bg-card animate-plant-grow" style={{animationDelay: `${index * 0.1}s`}}>
+                <Link
+                  key={plant.id}
+                  to={`/plant/${plant.id}`}
+                  className="group"
+                >
+                  <Card
+                    className="plant-card overflow-hidden plant-card-hover border-border/50 bg-card animate-plant-grow"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
                     <div className="relative">
                       <div className="aspect-square bg-muted overflow-hidden">
-                        <img 
-                          src={plant.images[0]} 
+                        <img
+                          src={plant.images[0]}
                           alt={plant.name}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                       </div>
                       <div className="absolute top-4 left-4 space-y-2">
                         {plant.new && (
-                          <Badge className="bg-primary text-primary-foreground">New</Badge>
+                          <Badge className="bg-primary text-primary-foreground">
+                            New
+                          </Badge>
                         )}
                         {plant.trending && (
-                          <Badge className="bg-plant-terracotta/90 text-white">Trending</Badge>
+                          <Badge className="bg-plant-terracotta/90 text-white">
+                            Trending
+                          </Badge>
                         )}
                       </div>
-                      <Button 
-                        size="icon" 
-                        variant="ghost" 
+                      <Button
+                        size="icon"
+                        variant="ghost"
                         className="absolute top-4 right-4 bg-white/80 hover:bg-white shadow-sm"
                       >
                         <Heart className="w-4 h-4" />
                       </Button>
                     </div>
-                    
+
                     <CardContent className="p-4 space-y-3">
                       <div className="space-y-1">
                         <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
@@ -341,9 +438,9 @@ export default function Index() {
                       <div className="flex items-center space-x-2">
                         <div className="flex items-center">
                           {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`w-4 h-4 ${i < Math.floor(plant.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'}`} 
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${i < Math.floor(plant.rating) ? "text-yellow-400 fill-current" : "text-gray-300"}`}
                             />
                           ))}
                         </div>
@@ -366,10 +463,14 @@ export default function Index() {
                           </div>
                           <div className="flex items-center space-x-2">
                             {plant.petFriendly && (
-                              <Badge variant="secondary" className="text-xs">Pet Friendly</Badge>
+                              <Badge variant="secondary" className="text-xs">
+                                Pet Friendly
+                              </Badge>
                             )}
                             {plant.lowMaintenance && (
-                              <Badge variant="secondary" className="text-xs">Low Care</Badge>
+                              <Badge variant="secondary" className="text-xs">
+                                Low Care
+                              </Badge>
                             )}
                           </div>
                         </div>
@@ -382,7 +483,9 @@ export default function Index() {
                           }}
                           disabled={addingToCart === plant.id}
                         >
-                          {addingToCart === plant.id ? 'Adding...' : 'Add to Cart'}
+                          {addingToCart === plant.id
+                            ? "Adding..."
+                            : "Add to Cart"}
                         </Button>
                       </div>
                     </CardContent>
@@ -411,15 +514,19 @@ export default function Index() {
               <Link key={plant.id} to={`/plant/${plant.id}`} className="group">
                 <Card className="overflow-hidden hover:shadow-lg transition-all duration-300 group-hover:-translate-y-1 border-border/50">
                   <div className="aspect-square bg-muted overflow-hidden relative">
-                    <img 
-                      src={plant.images[0]} 
+                    <img
+                      src={plant.images[0]}
                       alt={plant.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                     <div className="absolute bottom-4 left-4 right-4 text-white">
-                      <h3 className="font-semibold text-sm mb-1">{plant.name}</h3>
-                      <div className="text-lg font-bold">₹{plant.price.toLocaleString()}</div>
+                      <h3 className="font-semibold text-sm mb-1">
+                        {plant.name}
+                      </h3>
+                      <div className="text-lg font-bold">
+                        ₹{plant.price.toLocaleString()}
+                      </div>
                     </div>
                   </div>
                 </Card>
@@ -437,19 +544,20 @@ export default function Index() {
               Stay Green, Stay Updated
             </h2>
             <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto">
-              Get plant care tips, exclusive offers, and new arrivals delivered to your inbox
+              Get plant care tips, exclusive offers, and new arrivals delivered
+              to your inbox
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <Input 
-                placeholder="Enter your email" 
+              <Input
+                placeholder="Enter your email"
                 className="bg-white/90 border-white/20 placeholder:text-gray-500"
               />
               <Button className="bg-white text-primary hover:bg-white/90 whitespace-nowrap">
                 Subscribe
               </Button>
             </div>
-            
+
             <p className="text-sm text-primary-foreground/60">
               Join 10,000+ plant enthusiasts. Unsubscribe anytime.
             </p>
@@ -466,46 +574,134 @@ export default function Index() {
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
                   <Leaf className="w-5 h-5 text-plant-forest" />
                 </div>
-                <span className="text-xl font-bold">GreenHaven</span>
+                <span className="text-xl font-bold">GreenHeaven</span>
               </div>
               <p className="text-white/80">
-                Your trusted partner in creating beautiful, thriving plant collections for every space.
+                Your trusted partner in creating beautiful, thriving plant
+                collections for every space.
               </p>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Shop</h4>
               <ul className="space-y-2 text-white/80">
-                <li><Link to="/plants" className="hover:text-white transition-colors">All Plants</Link></li>
-                <li><Link to="/category/indoor" className="hover:text-white transition-colors">Indoor Plants</Link></li>
-                <li><Link to="/category/outdoor" className="hover:text-white transition-colors">Outdoor Plants</Link></li>
-                <li><Link to="/category/rare" className="hover:text-white transition-colors">Rare Plants</Link></li>
+                <li>
+                  <Link
+                    to="/plants"
+                    className="hover:text-white transition-colors"
+                  >
+                    All Plants
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/category/indoor"
+                    className="hover:text-white transition-colors"
+                  >
+                    Indoor Plants
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/category/outdoor"
+                    className="hover:text-white transition-colors"
+                  >
+                    Outdoor Plants
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/category/rare"
+                    className="hover:text-white transition-colors"
+                  >
+                    Rare Plants
+                  </Link>
+                </li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-white/80">
-                <li><Link to="/care" className="hover:text-white transition-colors">Plant Care</Link></li>
-                <li><Link to="/shipping" className="hover:text-white transition-colors">Shipping Info</Link></li>
-                <li><Link to="/returns" className="hover:text-white transition-colors">Returns</Link></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li>
+                  <Link
+                    to="/care"
+                    className="hover:text-white transition-colors"
+                  >
+                    Plant Care
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/shipping"
+                    className="hover:text-white transition-colors"
+                  >
+                    Shipping Info
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/returns"
+                    className="hover:text-white transition-colors"
+                  >
+                    Returns
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/contact"
+                    className="hover:text-white transition-colors"
+                  >
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-white/80">
-                <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-                <li><Link to="/sustainability" className="hover:text-white transition-colors">Sustainability</Link></li>
-                <li><Link to="/careers" className="hover:text-white transition-colors">Careers</Link></li>
-                <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                <li>
+                  <Link
+                    to="/about"
+                    className="hover:text-white transition-colors"
+                  >
+                    About Us
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/sustainability"
+                    className="hover:text-white transition-colors"
+                  >
+                    Sustainability
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/careers"
+                    className="hover:text-white transition-colors"
+                  >
+                    Careers
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/blog"
+                    className="hover:text-white transition-colors"
+                  >
+                    Blog
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-white/20 mt-8 pt-8 text-center text-white/60">
-            <p>&copy; 2024 GreenHaven. All rights reserved. Made with 🌱 for plant lovers.</p>
+            <p>
+              &copy; 2024 GreenHeaven. All rights reserved. Made with 🌱 for
+              plant lovers.
+            </p>
           </div>
         </div>
       </footer>

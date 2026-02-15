@@ -123,11 +123,11 @@ export const submitContactForm: RequestHandler = async (req, res) => {
         const autoReplyEmail = {
           from: process.env.EMAIL_USER,
           to: email,
-          subject: `🌿 Thank you for contacting GreenHaven - We'll be in touch soon!`,
+          subject: `🌿 Thank you for contacting GreenHeaven - We'll be in touch soon!`,
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
               <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #22c55e;">🌿 GreenHaven</h1>
+                <h1 style="color: #22c55e;">🌿 GreenHeaven</h1>
                 <p style="color: #666;">Thank you for reaching out!</p>
               </div>
               
@@ -161,7 +161,7 @@ export const submitContactForm: RequestHandler = async (req, res) => {
               
               <div style="text-align: center; color: #666; font-size: 12px; margin-top: 30px;">
                 <p>🌱 Growing together with nature</p>
-                <p>GreenHaven - Your trusted plant partner</p>
+                <p>GreenHeaven - Your trusted plant partner</p>
               </div>
             </div>
           `

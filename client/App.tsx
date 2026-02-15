@@ -48,83 +48,146 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/plants" element={<AllPlants />} />
-          <Route path="/all-plants" element={<AllPlants />} />
-          <Route path="/indoor-plants" element={<IndoorPlants />} />
-          <Route path="/outdoor-plants" element={<OutdoorPlants />} />
-          <Route path="/rare-plants" element={<RarePlants />} />
-          <Route path="/plant/:id" element={<PlantDetail />} />
-          <Route path="/category/:category" element={<PlantCatalog />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/buy-now/:id" element={<BuyNow />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/care" element={<PlantCare />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/shipping" element={<PlaceholderPage title="Shipping Information" description="Delivery details and policies" />} />
-          <Route path="/returns" element={<PlaceholderPage title="Returns & Exchanges" description="Easy return process" />} />
-          <Route path="/sustainability" element={<Sustainability />} />
-          <Route path="/careers" element={<Careers />} />
-          <Route path="/blog" element={<PlaceholderPage title="Plant Blog" description="Tips, tricks, and plant stories" />} />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/plants" element={<AllPlants />} />
+              <Route path="/all-plants" element={<AllPlants />} />
+              <Route path="/indoor-plants" element={<IndoorPlants />} />
+              <Route path="/outdoor-plants" element={<OutdoorPlants />} />
+              <Route path="/rare-plants" element={<RarePlants />} />
+              <Route path="/plant/:id" element={<PlantDetail />} />
+              <Route path="/category/:category" element={<PlantCatalog />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/buy-now/:id" element={<BuyNow />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/care" element={<PlantCare />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route
+                path="/shipping"
+                element={
+                  <PlaceholderPage
+                    title="Shipping Information"
+                    description="Delivery details and policies"
+                  />
+                }
+              />
+              <Route
+                path="/returns"
+                element={
+                  <PlaceholderPage
+                    title="Returns & Exchanges"
+                    description="Easy return process"
+                  />
+                }
+              />
+              <Route path="/sustainability" element={<Sustainability />} />
+              <Route path="/careers" element={<Careers />} />
+              <Route
+                path="/blog"
+                element={
+                  <PlaceholderPage
+                    title="Plant Blog"
+                    description="Tips, tricks, and plant stories"
+                  />
+                }
+              />
+              <Route
+                path="/terms"
+                element={
+                  <PlaceholderPage
+                    title="Terms & Conditions"
+                    description="Our terms and policies"
+                  />
+                }
+              />
 
-          {/* Admin Routes - Protected */}
-          <Route path="/admin" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminDashboard />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/products" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminProducts />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/orders" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminOrders />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/users" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminUsers />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/analytics" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminAnalytics />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/categories" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminCategories />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/pages" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminPages />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/enquiry" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminEnquiry />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/reports" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminReports />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/settings" element={
-            <ProtectedRoute requireAdmin={true}>
-              <AdminSettings />
-            </ProtectedRoute>
-          } />
+              {/* Admin Routes - Protected */}
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/products"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminProducts />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/orders"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminOrders />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminUsers />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/analytics"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminAnalytics />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/categories"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminCategories />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/pages"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminPages />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/enquiry"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminEnquiry />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/reports"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminReports />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/settings"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <AdminSettings />
+                  </ProtectedRoute>
+                }
+              />
 
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
           </BrowserRouter>
         </TooltipProvider>
       </CartProvider>
